@@ -51,7 +51,7 @@ private[athena] class Config(dbName: Any) {
     p
   }
 
-  private[athena] def getTmpStagingDir: Option[String] = {
+  private[athena] lazy val getTmpStagingDir: Option[String] = {
     map.get("s3_staging_dir_prefix").map { v =>
       s"$v/$stagingDirSuffix"
     }

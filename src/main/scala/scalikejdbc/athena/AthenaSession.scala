@@ -33,6 +33,8 @@ class AthenaSession(config: Config) extends DBSession {
     }
   }
 
+  def getTmpStagingDir: Option[String] = config.getTmpStagingDir
+
   override private[scalikejdbc] val connectionAttributes: DBConnectionAttributes = null
   override val tx: Option[Tx] = None
   override val isReadOnly: Boolean = true
