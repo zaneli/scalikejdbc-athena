@@ -2,3 +2,7 @@ language: scala
 sudo: false
 scala:
   - 2.12.4
+before_script:
+  - mkdir lib
+  - curl -L -o AthenaJDBC41-1.1.0.jar https://s3.amazonaws.com/athena-downloads/drivers/AthenaJDBC41-1.1.0.jar
+  - mv AthenaJDBC41-1.1.0.jar lib/
