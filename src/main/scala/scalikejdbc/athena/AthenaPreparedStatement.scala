@@ -9,14 +9,26 @@ import java.util.Calendar
 import scala.collection.concurrent.TrieMap
 import scala.collection.mutable
 
-class AthenaPreparedStatement(con: AthenaConnection, underlying: Statement, sql: String) extends java.sql.PreparedStatement {
+class AthenaPreparedStatement(con: AthenaConnection, underlying: Statement, sql: String) extends PreparedStatement {
   import com.amazonaws.athena.jdbc.NotImplementedException
 
   private[this] val parameterBuffer: mutable.Map[Int, AthenaParameter[_]] = TrieMap.empty
 
+  private[this] def params: Seq[AthenaParameter[_]] = parameterBuffer.toIndexedSeq.sortBy(_._1).map(_._2)
+
+  override def execute(): Boolean = {
+    val query = StatementBuilder.build(sql, params)
+    execute(query)
+  }
+
   override def executeQuery(): ResultSet = {
-    val query = StatementBuilder.build(sql, parameterBuffer.toList.sortBy(_._1).map(_._2))
+    val query = StatementBuilder.build(sql, params)
     executeQuery(query)
+  }
+
+  override def executeUpdate(): Int = {
+    val query = StatementBuilder.build(sql, params)
+    executeUpdate(query)
   }
 
   override def getConnection: Connection =
@@ -209,12 +221,6 @@ class AthenaPreparedStatement(con: AthenaConnection, underlying: Statement, sql:
 
   override def clearParameters(): Unit =
     throw new NotImplementedException("AthenaPreparedStatement", "clearParameters")
-
-  override def execute(): Boolean =
-    throw new NotImplementedException("AthenaPreparedStatement", "execute")
-
-  override def executeUpdate(): Int =
-    throw new NotImplementedException("AthenaPreparedStatement", "executeUpdate")
 
   override def getMetaData: ResultSetMetaData =
     throw new NotImplementedException("AthenaPreparedStatement", "getMetaData")
