@@ -8,5 +8,6 @@ scalaVersion := "2.12.4"
 
 libraryDependencies ++= Seq(
   "org.scalikejdbc" %% "scalikejdbc" % "3.1.0" % Provided,
-  "com.typesafe" % "config" % "1.3.2" % Provided
+  "com.typesafe" % "config" % "1.3.2" % Provided,
+  "org.scalatest" %% "scalatest" % "3.0.4" % Test
 )
