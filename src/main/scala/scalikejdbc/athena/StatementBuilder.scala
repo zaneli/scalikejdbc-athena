@@ -17,7 +17,7 @@ object StatementBuilder {
         c
     }.mkString
     if (i != params.size) {
-      throw new IllegalStateException(s"unexpected param size: index=$i, params=$params")
+      throw new IllegalStateException(s"unexpected placeholder and param size: template=$template, params=$params")
     }
     sql
   }
