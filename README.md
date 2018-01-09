@@ -5,7 +5,7 @@
 - Download [Athena JDBC Driver](https://docs.aws.amazon.com/athena/latest/ug/athena-jdbc-driver.html)
 ```sh
 > mkdir lib
-> curl -oL https://s3.amazonaws.com/athena-downloads/drivers/AthenaJDBC41-1.1.0.jar
+> curl -L -O https://s3.amazonaws.com/athena-downloads/drivers/AthenaJDBC41-1.1.0.jar
 > mv AthenaJDBC41-1.1.0.jar lib/
 ```
 
