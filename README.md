@@ -16,7 +16,7 @@ Library for using [Amazon Athena](https://aws.amazon.com/athena/) JDBC Driver wi
 - Configure the JDBC Driver Options on `resources/application.conf`
 
 ```
-db {
+athena {
   default {
     driver="com.amazonaws.athena.jdbc.AthenaDriver"
     url="jdbc:awsathena://athena.{REGION}.amazonaws.com:443"
@@ -49,7 +49,7 @@ DB.athena { implicit s =>
 
 * set `s3_staging_dir_prefix` instead of `s3_staging_dir`
 ```
-db {
+athena {
   default {
     driver="com.amazonaws.athena.jdbc.AthenaDriver"
     url="jdbc:awsathena://athena.{REGION}.amazonaws.com:443"

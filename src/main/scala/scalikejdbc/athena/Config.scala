@@ -8,7 +8,7 @@ import scala.collection.JavaConverters._
 
 private[athena] class Config(dbName: Any) {
 
-  private[this] val prefix = "db." + (dbName match {
+  private[this] val prefix = "athena." + (dbName match {
     case s: Symbol => s.name
     case s: String => s
     case o => throw new ConfigException(s"unexpected db name type: value=$o, type=${o.getClass}")
@@ -45,12 +45,12 @@ private[athena] class Config(dbName: Any) {
     val p = new Properties()
     (map.get("s3_staging_dir"), map.get("s3_staging_dir_prefix")) match {
       case (Some(d), Some(p)) => throw new ConfigException(s"duplicate settings: $prefix.s3_staging_dir=$d, $prefix.s3_staging_dir_prefix=$p")
-      case (Some(v), _) => p.put("s3_staging_dir", v)
-      case (_, Some(v)) => p.put("s3_staging_dir", s"$v/$stagingDirSuffix")
+      case (Some(v), _) => p.setProperty("s3_staging_dir", v)
+      case (_, Some(v)) => p.setProperty("s3_staging_dir", s"$v/$stagingDirSuffix")
       case _ => throw new ConfigException(s"no configuration setting: key=$prefix.s3_staging_dir, $prefix.s3_staging_dir_prefix")
     }
     optionalNames.foreach { name =>
-      map.get(name).foreach(value => p.put(name, value))
+      map.get(name).foreach(value => p.setProperty(name, value))
     }
     p
   }
