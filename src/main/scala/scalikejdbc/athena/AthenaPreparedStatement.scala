@@ -10,7 +10,6 @@ import scala.collection.concurrent.TrieMap
 import scala.collection.mutable
 
 class AthenaPreparedStatement(con: AthenaConnection, underlying: Statement, sql: String) extends PreparedStatement {
-  import com.amazonaws.athena.jdbc.NotImplementedException
 
   private[this] val parameterBuffer: mutable.Map[Int, AthenaParameter[_]] = TrieMap.empty
 
@@ -72,7 +71,7 @@ class AthenaPreparedStatement(con: AthenaConnection, underlying: Statement, sql:
 
   private[this] def setObjectIfNull(parameterIndex: Int, x: scala.Any): Unit = x match {
     case null => parameterBuffer(parameterIndex) = AthenaParameter.Null
-    case _ => throw new NotImplementedException("AthenaPreparedStatement", s"setObject(${x.getClass})")
+    case _ => notImplemented(s"setObject(${x.getClass})")
   }
 
   override def setShort(parameterIndex: Int, x: Short): Unit =
@@ -216,111 +215,79 @@ class AthenaPreparedStatement(con: AthenaConnection, underlying: Statement, sql:
   override def unwrap[T](iface: Class[T]): T =
     underlying.unwrap(iface)
 
-  override def addBatch(): Unit =
-    throw new NotImplementedException("AthenaPreparedStatement", "addBatch")
+  override def addBatch(): Unit = notImplemented("addBatch")
 
-  override def clearParameters(): Unit =
-    throw new NotImplementedException("AthenaPreparedStatement", "clearParameters")
+  override def clearParameters(): Unit = notImplemented("clearParameters")
 
-  override def getMetaData: ResultSetMetaData =
-    throw new NotImplementedException("AthenaPreparedStatement", "getMetaData")
+  override def getMetaData: ResultSetMetaData = notImplemented("getMetaData")
 
-  override def getParameterMetaData: ParameterMetaData =
-    throw new NotImplementedException("AthenaPreparedStatement", "getParameterMetaData")
+  override def getParameterMetaData: ParameterMetaData = notImplemented("getParameterMetaData")
 
-  override def setArray(parameterIndex: Int, x: SQLArray): Unit =
-    throw new NotImplementedException("AthenaPreparedStatement", "setArray")
+  override def setArray(parameterIndex: Int, x: SQLArray): Unit = notImplemented("setArray")
 
-  override def setAsciiStream(parameterIndex: Int, x: InputStream, length: Int): Unit =
-    throw new NotImplementedException("AthenaPreparedStatement", "setAsciiStream")
+  override def setAsciiStream(parameterIndex: Int, x: InputStream, length: Int): Unit = notImplemented("setAsciiStream")
 
-  override def setAsciiStream(parameterIndex: Int, x: InputStream, length: Long): Unit =
-    throw new NotImplementedException("AthenaPreparedStatement", "setAsciiStream")
+  override def setAsciiStream(parameterIndex: Int, x: InputStream, length: Long): Unit = notImplemented("setAsciiStream")
 
-  override def setAsciiStream(parameterIndex: Int, x: InputStream): Unit =
-    throw new NotImplementedException("AthenaPreparedStatement", "setAsciiStream")
+  override def setAsciiStream(parameterIndex: Int, x: InputStream): Unit = notImplemented("setAsciiStream")
 
-  override def setBigDecimal(parameterIndex: Int, x: java.math.BigDecimal): Unit =
-    throw new NotImplementedException("AthenaPreparedStatement", "setBigDecimal")
+  override def setBigDecimal(parameterIndex: Int, x: java.math.BigDecimal): Unit = notImplemented("setBigDecimal")
 
-  override def setBinaryStream(parameterIndex: Int, x: InputStream, length: Int): Unit =
-    throw new NotImplementedException("AthenaPreparedStatement", "setBinaryStream")
+  override def setBinaryStream(parameterIndex: Int, x: InputStream, length: Int): Unit = notImplemented("setBinaryStream")
 
-  override def setBinaryStream(parameterIndex: Int, x: InputStream, length: Long): Unit =
-    throw new NotImplementedException("AthenaPreparedStatement", "setBinaryStream")
+  override def setBinaryStream(parameterIndex: Int, x: InputStream, length: Long): Unit = notImplemented("setBinaryStream")
 
-  override def setBinaryStream(parameterIndex: Int, x: InputStream): Unit =
-    throw new NotImplementedException("AthenaPreparedStatement", "setBinaryStream")
+  override def setBinaryStream(parameterIndex: Int, x: InputStream): Unit = notImplemented("setBinaryStream")
 
-  override def setBlob(parameterIndex: Int, x: Blob): Unit =
-    throw new NotImplementedException("AthenaPreparedStatement", "setBlob")
+  override def setBlob(parameterIndex: Int, x: Blob): Unit = notImplemented("setBlob")
 
-  override def setBlob(parameterIndex: Int, inputStream: InputStream, length: Long): Unit =
-    throw new NotImplementedException("AthenaPreparedStatement", "setBlob")
+  override def setBlob(parameterIndex: Int, inputStream: InputStream, length: Long): Unit = notImplemented("setBlob")
 
-  override def setBlob(parameterIndex: Int, inputStream: InputStream): Unit =
-    throw new NotImplementedException("AthenaPreparedStatement", "setBlob")
+  override def setBlob(parameterIndex: Int, inputStream: InputStream): Unit = notImplemented("setBlob")
 
-  override def setBytes(parameterIndex: Int, x: Array[Byte]): Unit =
-    throw new NotImplementedException("AthenaPreparedStatement", "setBytes")
+  override def setBytes(parameterIndex: Int, x: Array[Byte]): Unit = notImplemented("setBytes")
 
-  override def setCharacterStream(parameterIndex: Int, reader: Reader, length: Int): Unit =
-    throw new NotImplementedException("AthenaPreparedStatement", "setCharacterStream")
+  override def setCharacterStream(parameterIndex: Int, reader: Reader, length: Int): Unit = notImplemented("setCharacterStream")
 
-  override def setCharacterStream(parameterIndex: Int, reader: Reader, length: Long): Unit =
-    throw new NotImplementedException("AthenaPreparedStatement", "setCharacterStream")
+  override def setCharacterStream(parameterIndex: Int, reader: Reader, length: Long): Unit = notImplemented("setCharacterStream")
 
-  override def setCharacterStream(parameterIndex: Int, reader: Reader): Unit =
-    throw new NotImplementedException("AthenaPreparedStatement", "setCharacterStream")
+  override def setCharacterStream(parameterIndex: Int, reader: Reader): Unit = notImplemented("setCharacterStream")
 
-  override def setClob(parameterIndex: Int, x: Clob): Unit =
-    throw new NotImplementedException("AthenaPreparedStatement", "setClob")
+  override def setClob(parameterIndex: Int, x: Clob): Unit = notImplemented("setClob")
 
-  override def setClob(parameterIndex: Int, reader: Reader, length: Long): Unit =
-    throw new NotImplementedException("AthenaPreparedStatement", "setClob")
+  override def setClob(parameterIndex: Int, reader: Reader, length: Long): Unit = notImplemented("setClob")
 
-  override def setClob(parameterIndex: Int, reader: Reader): Unit =
-    throw new NotImplementedException("AthenaPreparedStatement", "setClob")
+  override def setClob(parameterIndex: Int, reader: Reader): Unit = notImplemented("setClob")
 
-  override def setFloat(parameterIndex: Int, x: Float): Unit =
-    throw new NotImplementedException("AthenaPreparedStatement", "setFloat")
+  override def setFloat(parameterIndex: Int, x: Float): Unit = notImplemented("setFloat")
 
-  override def setNCharacterStream(parameterIndex: Int, value: Reader, length: Long): Unit =
-    throw new NotImplementedException("AthenaPreparedStatement", "setNCharacterStream")
+  override def setNCharacterStream(parameterIndex: Int, value: Reader, length: Long): Unit = notImplemented("setNCharacterStream")
 
-  override def setNCharacterStream(parameterIndex: Int, value: Reader): Unit =
-    throw new NotImplementedException("AthenaPreparedStatement", "setNCharacterStream")
+  override def setNCharacterStream(parameterIndex: Int, value: Reader): Unit = notImplemented("setNCharacterStream")
 
-  override def setNClob(parameterIndex: Int, value: NClob): Unit =
-    throw new NotImplementedException("AthenaPreparedStatement", "setNClob")
+  override def setNClob(parameterIndex: Int, value: NClob): Unit = notImplemented("setNClob")
 
-  override def setNClob(parameterIndex: Int, reader: Reader, length: Long): Unit =
-    throw new NotImplementedException("AthenaPreparedStatement", "setNClob")
+  override def setNClob(parameterIndex: Int, reader: Reader, length: Long): Unit = notImplemented("setNClob")
 
-  override def setNClob(parameterIndex: Int, reader: Reader): Unit =
-    throw new NotImplementedException("AthenaPreparedStatement", "setNClob")
+  override def setNClob(parameterIndex: Int, reader: Reader): Unit = notImplemented("setNClob")
 
-  override def setNString(parameterIndex: Int, value: String): Unit =
-    throw new NotImplementedException("AthenaPreparedStatement", "setNString")
+  override def setNString(parameterIndex: Int, value: String): Unit = notImplemented("setNString")
 
-  override def setRef(parameterIndex: Int, x: Ref): Unit =
-    throw new NotImplementedException("AthenaPreparedStatement", "setRef")
+  override def setRef(parameterIndex: Int, x: Ref): Unit = notImplemented("setRef")
 
-  override def setRowId(parameterIndex: Int, x: RowId): Unit =
-    throw new NotImplementedException("AthenaPreparedStatement", "setRowId")
+  override def setRowId(parameterIndex: Int, x: RowId): Unit = notImplemented("setRowId")
 
-  override def setSQLXML(parameterIndex: Int, xmlObject: SQLXML): Unit =
-    throw new NotImplementedException("AthenaPreparedStatement", "setSQLXML")
+  override def setSQLXML(parameterIndex: Int, xmlObject: SQLXML): Unit = notImplemented("setSQLXML")
 
-  override def setTime(parameterIndex: Int, x: Time): Unit =
-    throw new NotImplementedException("AthenaPreparedStatement", "setTime")
+  override def setTime(parameterIndex: Int, x: Time): Unit = notImplemented("setTime")
 
-  override def setTime(parameterIndex: Int, x: Time, cal: Calendar): Unit =
-    throw new NotImplementedException("AthenaPreparedStatement", "setTime")
+  override def setTime(parameterIndex: Int, x: Time, cal: Calendar): Unit = notImplemented("setTime")
 
-  override def setUnicodeStream(parameterIndex: Int, x: InputStream, length: Int): Unit =
-    throw new NotImplementedException("AthenaPreparedStatement", "setUnicodeStream")
+  override def setUnicodeStream(parameterIndex: Int, x: InputStream, length: Int): Unit = notImplemented("setUnicodeStream")
 
-  override def setURL(parameterIndex: Int, x: URL): Unit =
-    throw new NotImplementedException("AthenaPreparedStatement", "setURL")
+  override def setURL(parameterIndex: Int, x: URL): Unit = notImplemented("setURL")
+
+  private[this] def notImplemented(method: String): Nothing = {
+    throw new UnsupportedOperationException(s"method AthenaPreparedStatement.$method is not yet implemented")
+  }
 }
