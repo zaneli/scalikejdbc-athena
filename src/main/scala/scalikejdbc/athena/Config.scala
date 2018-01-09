@@ -11,7 +11,7 @@ private[athena] class Config(dbName: Any) {
   private[this] val prefix = "db." + (dbName match {
     case s: Symbol => s.name
     case s: String => s
-    case o => throw new ConfigException("")
+    case o => throw new ConfigException(s"unexpected db name type: value=$o, type=${o.getClass}")
   })
 
   private[this] val config = ConfigFactory.load()
@@ -26,24 +26,28 @@ private[athena] class Config(dbName: Any) {
     "url", "driver", "s3_staging_dir", "s3_staging_dir_prefix",
   ) ++ optionalNames
 
-  private[this] val map = config.getConfig(prefix).entrySet.asScala.map(_.getKey).collect {
-    case key if attributeNames.contains(key) =>
-      key -> config.getString(s"$prefix.$key")
-  }.toMap
+  private[this] val map = if (config.hasPath(prefix)) {
+    config.getConfig(prefix).entrySet.asScala.map(_.getKey).collect {
+      case key if attributeNames.contains(key) =>
+        key -> config.getString(s"$prefix.$key")
+    }.toMap
+  } else {
+    throw new ConfigException(s"no configuration setting: key=$prefix")
+  }
 
   map.get("driver").foreach(Class.forName)
 
   private[this] lazy val stagingDirSuffix = UUID.randomUUID().toString
 
-  private[athena] lazy val url: String = map.getOrElse("url", throw new ConfigException(""))
+  private[athena] lazy val url: String = map.getOrElse("url", throw new ConfigException(s"no configuration setting: key=$prefix.url"))
 
   private[athena] lazy val options: Properties = {
     val p = new Properties()
     (map.get("s3_staging_dir"), map.get("s3_staging_dir_prefix")) match {
-      case (Some(_), Some(_)) => throw new ConfigException("")
+      case (Some(d), Some(p)) => throw new ConfigException(s"duplicate settings: $prefix.s3_staging_dir=$d, $prefix.s3_staging_dir_prefix=$p")
       case (Some(v), _) => p.put("s3_staging_dir", v)
       case (_, Some(v)) => p.put("s3_staging_dir", s"$v/$stagingDirSuffix")
-      case _ => throw new ConfigException("")
+      case _ => throw new ConfigException(s"no configuration setting: key=$prefix.s3_staging_dir, $prefix.s3_staging_dir_prefix")
     }
     optionalNames.foreach { name =>
       map.get(name).foreach(value => p.put(name, value))
