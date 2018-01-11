@@ -7,6 +7,7 @@ import com.typesafe.config.ConfigFactory
 import scala.collection.JavaConverters._
 
 private[athena] class Config(dbName: Any) {
+  import Config._
 
   private[this] val prefix = "athena." + (dbName match {
     case s: Symbol => s.name
@@ -17,14 +18,12 @@ private[athena] class Config(dbName: Any) {
   private[this] val config = ConfigFactory.load()
 
   private[this] val optionalNames = Seq(
-    "query_results_encryption_option", "query_results_aws_kms_key",
-    "aws_credentials_provider_class", "aws_credentials_provider_arguments",
-    "max_error_retries", "connection_timeout", "socket_timeout",
-    "retry_base_delay", "retry_max_backoff_time", "log_path", "log_level"
+    QueryResultsEncryptionOption, QueryResultsAWSKmsKey,
+    AWSCredentialsProviderClass, AWSCredentialsProviderArguments,
+    MaxErrorRetries, ConnectionTimeout, SocketTimeout,
+    RetryBaseDelay, RetryMaxBackoffTime, LogPath, LogLevel
   )
-  private[this] val attributeNames = Seq(
-    "url", "driver", "s3_staging_dir", "s3_staging_dir_prefix",
-  ) ++ optionalNames
+  private[this] val attributeNames = Seq(Url, Driver, S3StagingDir, S3StagingDirPrefix) ++ optionalNames
 
   private[this] val map = if (config.hasPath(prefix)) {
     config.getConfig(prefix).entrySet.asScala.map(_.getKey).collect {
@@ -35,19 +34,17 @@ private[athena] class Config(dbName: Any) {
     throw new ConfigException(s"no configuration setting: key=$prefix")
   }
 
-  map.get("driver").foreach(Class.forName)
+  map.get(Driver).foreach(Class.forName)
 
-  private[this] lazy val stagingDirSuffix = UUID.randomUUID().toString
-
-  private[athena] lazy val url: String = map.getOrElse("url", throw new ConfigException(s"no configuration setting: key=$prefix.url"))
+  private[athena] lazy val url: String = map.getOrElse(Url, throw new ConfigException(s"no configuration setting: key=$prefix.$Url"))
 
   private[athena] lazy val options: Properties = {
     val p = new Properties()
-    (map.get("s3_staging_dir"), map.get("s3_staging_dir_prefix")) match {
-      case (Some(d), Some(p)) => throw new ConfigException(s"duplicate settings: $prefix.s3_staging_dir=$d, $prefix.s3_staging_dir_prefix=$p")
-      case (Some(v), _) => p.setProperty("s3_staging_dir", v)
-      case (_, Some(v)) => p.setProperty("s3_staging_dir", s"$v/$stagingDirSuffix")
-      case _ => throw new ConfigException(s"no configuration setting: key=$prefix.s3_staging_dir, $prefix.s3_staging_dir_prefix")
+    (map.get(S3StagingDir), map.get(S3StagingDirPrefix)) match {
+      case (Some(d), Some(p)) => throw new ConfigException(s"duplicate settings: $prefix.$S3StagingDir=$d, $prefix.$S3StagingDirPrefix=$p")
+      case (Some(v), _) => p.setProperty(S3StagingDir, v)
+      case (_, Some(v)) => p.setProperty(S3StagingDir, s"$v/${UUID.randomUUID()}")
+      case _ => throw new ConfigException(s"no configuration setting: key=$prefix.$S3StagingDir, $prefix.$S3StagingDirPrefix")
     }
     optionalNames.foreach { name =>
       map.get(name).foreach(value => p.setProperty(name, value))
@@ -56,10 +53,32 @@ private[athena] class Config(dbName: Any) {
   }
 
   private[athena] lazy val getTmpStagingDir: Option[String] = {
-    map.get("s3_staging_dir_prefix").map { v =>
-      s"$v/$stagingDirSuffix"
+    if (map.contains(S3StagingDirPrefix)) {
+      Option(options.getProperty(S3StagingDir))
+    } else {
+      None
     }
   }
+}
+
+object Config {
+  val Url = "url"
+  val Driver = "driver"
+
+  val S3StagingDir = "s3_staging_dir"
+  val S3StagingDirPrefix = "s3_staging_dir_prefix"
+
+  val QueryResultsEncryptionOption = "query_results_encryption_option"
+  val QueryResultsAWSKmsKey = "query_results_aws_kms_key"
+  val AWSCredentialsProviderClass = "aws_credentials_provider_class"
+  val AWSCredentialsProviderArguments = "aws_credentials_provider_arguments"
+  val MaxErrorRetries = "max_error_retries"
+  val ConnectionTimeout = "connection_timeout"
+  val SocketTimeout = "socket_timeout"
+  val RetryBaseDelay = "retry_base_delay"
+  val RetryMaxBackoffTime = "retry_max_backoff_time"
+  val LogPath = "log_path"
+  val LogLevel = "log_level"
 }
 
 class ConfigException(message: String) extends Exception(message)
