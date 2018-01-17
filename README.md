@@ -2,7 +2,7 @@
 
 Library for using [Amazon Athena](https://aws.amazon.com/athena/) JDBC Driver with [ScalikeJDBC](http://scalikejdbc.org/)
 
-[![Build Status](https://api.travis-ci.org/zaneli/scalikejdbc-athena.png?branch=master)](https://travis-ci.org/zaneli/scalikejdbc-athena)
+[![Build Status](https://api.travis-ci.org/zaneli/scalikejdbc-athena.svg?branch=master)](https://travis-ci.org/zaneli/scalikejdbc-athena)
 
 ## setup
 
