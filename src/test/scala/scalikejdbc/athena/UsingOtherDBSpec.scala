@@ -37,8 +37,6 @@ class UsingOtherDBSpec extends FunSpec with BeforeAndAfter {
     }
     it("use QueryDSL") {
       val results = NamedDB(User.connectionPoolName).athena { implicit s =>
-        pool(User.connectionPoolName)
-
         val count = users.map { user =>
           withSQL { insert.into(User).values(user.id, user.name) }.update().apply()
         }.sum
@@ -54,12 +52,7 @@ class UsingOtherDBSpec extends FunSpec with BeforeAndAfter {
   case class User(id: Long, name: String)
   object User extends SQLSyntaxSupport[User] {
     override lazy val connectionPoolName = 'h2
+    override lazy val columnNames = Seq("id", "name")
     def apply(n: ResultName[User])(rs: WrappedResultSet): User = autoConstruct(rs, n)
-  }
-
-  // for use SQLSyntaxSupport
-  private[this] def pool(dbName: Any): Unit = {
-    val config = new Config(dbName)
-    ConnectionPool.add(dbName, config.url, config.options.getProperty("user"), config.options.getProperty("password"))
   }
 }
