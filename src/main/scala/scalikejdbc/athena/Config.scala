@@ -6,7 +6,7 @@ import com.typesafe.config.ConfigFactory
 
 import scala.collection.JavaConverters._
 
-private[athena] class Config(dbName: Any) {
+class Config(dbName: Any) {
   import Config._
 
   private[this] val prefix = "athena." + (dbName match {
