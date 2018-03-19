@@ -83,9 +83,11 @@ DB.athena { implicit s =>
     case regex(bucketName, path) =>
       val keys = s3Client.listObjects(bucketName, path).getObjectSummaries.asScala
         .map(s => new DeleteObjectsRequest.KeyVersion(s.getKey))
-      val delReq = new DeleteObjectsRequest(bucketName)
-      delReq.setKeys(keys.asJava)
-      s3Client.deleteObjects(delReq)
+      if (keys.nonEmpty) {
+        val delReq = new DeleteObjectsRequest(bucketName)
+        delReq.setKeys(keys.asJava)
+        s3Client.deleteObjects(delReq)
+      }
   }
 }
 ```
