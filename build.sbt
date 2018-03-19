@@ -13,3 +13,5 @@ libraryDependencies ++= Seq(
   "org.scalikejdbc" %% "scalikejdbc-syntax-support-macro" % "3.1.0" % Test,
   "com.h2database" % "h2" % "1.4.196" % Test
 )
+
+publishTo := sonatypePublishTo.value
