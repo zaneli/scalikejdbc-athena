@@ -13,6 +13,14 @@ Library for using [Amazon Athena](https://aws.amazon.com/athena/) JDBC Driver wi
 > mv AthenaJDBC41-1.1.0.jar lib/
 ```
 
+- Add library dependencies to sbt build settings
+```scala
+libraryDependencies ++= Seq(
+  "org.scalikejdbc" %% "scalikejdbc" % "2.5.1", // or later
+  "com.zaneli" %% "scalikejdbc-athena" % "0.1.0"
+)
+```
+
 - Configure the JDBC Driver Options on `resources/application.conf`
 
 ```
