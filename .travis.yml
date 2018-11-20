@@ -4,5 +4,5 @@ scala:
   - 2.12.4
 before_script:
   - mkdir lib
-  - curl -L -o AthenaJDBC41-1.1.0.jar https://s3.amazonaws.com/athena-downloads/drivers/AthenaJDBC41-1.1.0.jar
-  - mv AthenaJDBC41-1.1.0.jar lib/
+  - curl -L -o AthenaJDBC41_2.0.5.jar https://s3.amazonaws.com/athena-downloads/drivers/JDBC/SimbaAthenaJDBC_2.0.5/AthenaJDBC41_2.0.5.jar
+  - mv AthenaJDBC41_2.0.5.jar lib/
