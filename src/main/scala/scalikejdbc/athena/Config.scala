@@ -5,6 +5,7 @@ import java.util.{Properties, UUID}
 import com.typesafe.config.ConfigFactory
 
 import scala.collection.JavaConverters._
+import scala.util.Try
 
 class Config(dbName: Any) {
   import Config._
@@ -18,12 +19,15 @@ class Config(dbName: Any) {
   private[this] val config = ConfigFactory.load()
 
   private[this] val optionalNames = Seq(
-    QueryResultsEncryptionOption, QueryResultsAWSKmsKey,
-    AWSCredentialsProviderClass, AWSCredentialsProviderArguments,
-    MaxErrorRetries, ConnectionTimeout, SocketTimeout,
-    RetryBaseDelay, RetryMaxBackoffTime, LogPath, LogLevel
+    AwsCredentialsProviderArguments, AwsCredentialsProviderClass, BinaryColumnLength, ComplexTypeColumnLength,
+    ConnectionTest, ConnectTimeout, LogLevel, LogPath, MaxCatalogNameLength, MaxColumnNameLength, MaxErrorRetry,
+    MaxSchemaNameLength, MaxTableNameLength, MetadataRetrievalMethod, NonProxyHosts, PWD, PreemptiveBasicProxyAuth,
+    ProxyDomain, ProxyHost, ProxyPort, ProxyPWD, ProxyUID, ProxyWorkstation, RowsToFetchPerBlock, S3OutputEncKMSKey,
+    S3OutputEncOption, Schema, SocketTimeout, StringColumnLength, UseArraySupport, OUseAwsLogger,
+    UseResultsetStreaming, UID
   )
-  private[this] val attributeNames = Seq(Url, Driver, S3StagingDir, S3StagingDirPrefix) ++ optionalNames
+
+  private[this] val attributeNames = Seq(Url, Driver, ReadOnly, S3OutputLocation, S3OutputLocationPrefix) ++ optionalNames
 
   private[this] val map = if (config.hasPath(prefix)) {
     config.getConfig(prefix).entrySet.asScala.map(_.getKey).collect {
@@ -38,13 +42,15 @@ class Config(dbName: Any) {
 
   private[athena] lazy val url: String = map.getOrElse(Url, throw new ConfigException(s"no configuration setting: key=$prefix.$Url"))
 
+  private[athena] lazy val readOnly: Option[Boolean] = map.get(ReadOnly).flatMap(v => Try(v.toBoolean).toOption)
+
   private[athena] lazy val options: Properties = {
     val p = new Properties()
-    (map.get(S3StagingDir), map.get(S3StagingDirPrefix)) match {
-      case (Some(d), Some(p)) => throw new ConfigException(s"duplicate settings: $prefix.$S3StagingDir=$d, $prefix.$S3StagingDirPrefix=$p")
-      case (Some(v), _) => p.setProperty(S3StagingDir, v)
-      case (_, Some(v)) => p.setProperty(S3StagingDir, s"$v/${UUID.randomUUID()}")
-      case _ => throw new ConfigException(s"no configuration setting: key=$prefix.$S3StagingDir, $prefix.$S3StagingDirPrefix")
+    (map.get(S3OutputLocation), map.get(S3OutputLocationPrefix)) match {
+      case (Some(d), Some(p)) => throw new ConfigException(s"duplicate settings: $prefix.$S3OutputLocation=$d, $prefix.$S3OutputLocationPrefix=$p")
+      case (Some(v), _) => p.setProperty(S3OutputLocation, v)
+      case (_, Some(v)) => p.setProperty(S3OutputLocation, s"$v/${UUID.randomUUID()}")
+      case _ => throw new ConfigException(s"no configuration setting: key=$prefix.$S3OutputLocation, $prefix.$S3OutputLocationPrefix")
     }
     optionalNames.foreach { name =>
       map.get(name).foreach(value => p.setProperty(name, value))
@@ -53,8 +59,8 @@ class Config(dbName: Any) {
   }
 
   private[athena] lazy val getTmpStagingDir: Option[String] = {
-    if (map.contains(S3StagingDirPrefix)) {
-      Option(options.getProperty(S3StagingDir))
+    if (map.contains(S3OutputLocationPrefix)) {
+      Option(options.getProperty(S3OutputLocation))
     } else {
       None
     }
@@ -64,21 +70,44 @@ class Config(dbName: Any) {
 object Config {
   val Url = "url"
   val Driver = "driver"
+  val ReadOnly = "readOnly"
 
-  val S3StagingDir = "s3_staging_dir"
-  val S3StagingDirPrefix = "s3_staging_dir_prefix"
+  val S3OutputLocation = "S3OutputLocation"
+  val S3OutputLocationPrefix = "S3OutputLocationPrefix"
 
-  val QueryResultsEncryptionOption = "query_results_encryption_option"
-  val QueryResultsAWSKmsKey = "query_results_aws_kms_key"
-  val AWSCredentialsProviderClass = "aws_credentials_provider_class"
-  val AWSCredentialsProviderArguments = "aws_credentials_provider_arguments"
-  val MaxErrorRetries = "max_error_retries"
-  val ConnectionTimeout = "connection_timeout"
-  val SocketTimeout = "socket_timeout"
-  val RetryBaseDelay = "retry_base_delay"
-  val RetryMaxBackoffTime = "retry_max_backoff_time"
-  val LogPath = "log_path"
-  val LogLevel = "log_level"
+  val AwsCredentialsProviderArguments = "AwsCredentialsProviderArguments"
+  val AwsCredentialsProviderClass = "AwsCredentialsProviderClass"
+  val BinaryColumnLength = "BinaryColumnLength"
+  val ComplexTypeColumnLength = "ComplexTypeColumnLength"
+  val ConnectionTest = "ConnectionTest"
+  val ConnectTimeout = "ConnectTimeout"
+  val LogLevel = "LogLevel"
+  val LogPath = "LogPath"
+  val MaxCatalogNameLength = "MaxCatalogNameLength"
+  val MaxColumnNameLength = "MaxColumnNameLength"
+  val MaxErrorRetry = "MaxErrorRetry"
+  val MaxSchemaNameLength = "MaxSchemaNameLength"
+  val MaxTableNameLength = "MaxTableNameLength"
+  val MetadataRetrievalMethod = "MetadataRetrievalMethod"
+  val NonProxyHosts = "NonProxyHosts"
+  val PWD = "PWD"
+  val PreemptiveBasicProxyAuth = "PreemptiveBasicProxyAuth"
+  val ProxyDomain = "ProxyDomain"
+  val ProxyHost = "ProxyHost"
+  val ProxyPort = "ProxyPort"
+  val ProxyPWD = "ProxyPWD"
+  val ProxyUID = "ProxyUID"
+  val ProxyWorkstation = "ProxyWorkstation"
+  val RowsToFetchPerBlock = "RowsToFetchPerBlock"
+  val S3OutputEncKMSKey = "S3OutputEncKMSKey"
+  val S3OutputEncOption = "S3OutputEncOption"
+  val Schema = "Schema"
+  val SocketTimeout = "SocketTimeout"
+  val StringColumnLength = "StringColumnLength"
+  val UseArraySupport = "UseArraySupport"
+  val OUseAwsLogger = "OUseAwsLogger"
+  val UseResultsetStreaming = "UseResultsetStreaming"
+  val UID = "UID"
 }
 
 class ConfigException(message: String) extends Exception(message)
