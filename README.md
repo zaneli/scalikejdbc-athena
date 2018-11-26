@@ -9,8 +9,8 @@ Library for using [Amazon Athena](https://aws.amazon.com/athena/) JDBC Driver wi
 - Download [Athena JDBC Driver](https://docs.aws.amazon.com/athena/latest/ug/athena-jdbc-driver.html)
 ```sh
 > mkdir lib
-> curl -L -O https://s3.amazonaws.com/athena-downloads/drivers/AthenaJDBC41-1.1.0.jar
-> mv AthenaJDBC41-1.1.0.jar lib/
+> curl -L -O https://s3.amazonaws.com/athena-downloads/drivers/JDBC/SimbaAthenaJDBC_2.0.5/AthenaJDBC41_2.0.5.jar
+> mv AthenaJDBC41_2.0.5.jar lib/
 ```
 
 - Add library dependencies to sbt build settings
@@ -26,14 +26,18 @@ libraryDependencies ++= Seq(
 ```
 athena {
   default {
-    driver="com.amazonaws.athena.jdbc.AthenaDriver"
-    url="jdbc:awsathena://athena.{REGION}.amazonaws.com:443"
-    s3_staging_dir="s3://query-results-bucket/folder/"
-    aws_credentials_provider_class="com.amazonaws.auth.profile.ProfileCredentialsProvider"
-    log_path="logs/application.log"
+    driver="com.simba.athena.jdbc.Driver"
+    url="jdbc:awsathena://AwsRegion={REGION}"
+    readOnly="false"
+    S3OutputLocation="s3://query-results-bucket/folder/"
+    AwsCredentialsProviderClass="com.simba.athena.amazonaws.auth.profile.ProfileCredentialsProvider"
+    LogPath="logs/application.log"
+    LogLevel=3
   }
 }
 ```
+
+If you need to update partitions etc., set `readOnly="false"`
 
 ## Usage
 
@@ -53,17 +57,19 @@ DB.athena { implicit s =>
 }
 ```
 
-### Delete `s3_staging_dir` after run query
+### Delete `S3OutputLocation` after run query
 
-* set `s3_staging_dir_prefix` instead of `s3_staging_dir`
+* set `S3OutputLocationPrefix` instead of `S3OutputLocation`
 ```
 athena {
   default {
-    driver="com.amazonaws.athena.jdbc.AthenaDriver"
-    url="jdbc:awsathena://athena.{REGION}.amazonaws.com:443"
-    s3_staging_dir_prefix="s3://query-results-bucket/folder"
-    aws_credentials_provider_class="com.amazonaws.auth.profile.ProfileCredentialsProvider"
-    log_path="logs/application.log"
+    driver="com.simba.athena.jdbc.Driver"
+    url="jdbc:awsathena://AwsRegion={REGION}"
+    readOnly="false"
+    S3OutputLocationPrefix="s3://query-results-bucket/folder"
+    AwsCredentialsProviderClass="com.simba.athena.amazonaws.auth.profile.ProfileCredentialsProvider"
+    LogPath="logs/application.log"
+    LogLevel=3
   }
 }
 ```
