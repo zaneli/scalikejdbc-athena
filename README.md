@@ -6,7 +6,7 @@ Library for using [Amazon Athena](https://aws.amazon.com/athena/) JDBC Driver wi
 
 ## setup
 
-- Download [Athena JDBC Driver](https://docs.aws.amazon.com/athena/latest/ug/athena-jdbc-driver.html)
+- Download [Athena JDBC Driver](https://docs.aws.amazon.com/athena/latest/ug/connect-with-jdbc.html)
 ```sh
 > mkdir lib
 > curl -L -O https://s3.amazonaws.com/athena-downloads/drivers/JDBC/SimbaAthenaJDBC_2.0.5/AthenaJDBC41_2.0.5.jar
