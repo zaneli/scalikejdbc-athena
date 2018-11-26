@@ -11,6 +11,7 @@ class ConfigSpec extends FunSpec with OptionValues {
       assert(config.options.getProperty("S3OutputLocation") === "s3://query-results-bucket/folder/")
       assert(config.options.getProperty("LogPath") === "logs/application.log")
       assert(config.getTmpStagingDir.isEmpty)
+      assert(config.readOnly.value === false)
     }
     it("named db") {
       val config = new Config('athena)
@@ -19,10 +20,12 @@ class ConfigSpec extends FunSpec with OptionValues {
       assert(config.options.getProperty("S3OutputLocation").startsWith("s3://query-results-bucket/folder") === true)
       assert(config.options.containsKey("LogPath") === false)
       assert(config.getTmpStagingDir.value === config.options.getProperty("S3OutputLocation"))
+      assert(config.readOnly.value === true)
     }
     it("invalid settings") {
       val config = new Config('duplicated)
       assertThrows[ConfigException](config.options)
+      assert(config.readOnly.isEmpty)
     }
     it("unconfigured db") {
       assertThrows[ConfigException](new Config('unconfigured))

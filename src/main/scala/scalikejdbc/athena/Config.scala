@@ -5,6 +5,7 @@ import java.util.{Properties, UUID}
 import com.typesafe.config.ConfigFactory
 
 import scala.collection.JavaConverters._
+import scala.util.Try
 
 class Config(dbName: Any) {
   import Config._
@@ -26,7 +27,7 @@ class Config(dbName: Any) {
     UseResultsetStreaming, UID
   )
 
-  private[this] val attributeNames = Seq(Url, Driver, S3OutputLocation, S3OutputLocationPrefix) ++ optionalNames
+  private[this] val attributeNames = Seq(Url, Driver, ReadOnly, S3OutputLocation, S3OutputLocationPrefix) ++ optionalNames
 
   private[this] val map = if (config.hasPath(prefix)) {
     config.getConfig(prefix).entrySet.asScala.map(_.getKey).collect {
@@ -40,6 +41,8 @@ class Config(dbName: Any) {
   map.get(Driver).foreach(Class.forName)
 
   private[athena] lazy val url: String = map.getOrElse(Url, throw new ConfigException(s"no configuration setting: key=$prefix.$Url"))
+
+  private[athena] lazy val readOnly: Option[Boolean] = map.get(ReadOnly).flatMap(v => Try(v.toBoolean).toOption)
 
   private[athena] lazy val options: Properties = {
     val p = new Properties()
@@ -67,6 +70,7 @@ class Config(dbName: Any) {
 object Config {
   val Url = "url"
   val Driver = "driver"
+  val ReadOnly = "readOnly"
 
   val S3OutputLocation = "S3OutputLocation"
   val S3OutputLocationPrefix = "S3OutputLocationPrefix"

@@ -6,8 +6,11 @@ import scalikejdbc.{DBConnectionAttributes, DBSession, SettingsProvider, Tx}
 
 class AthenaSession(config: Config) extends DBSession {
 
-  override private[scalikejdbc] lazy val conn: Connection =
-    new AthenaConnection(DriverManager.getConnection(config.url, config.options))
+  override private[scalikejdbc] lazy val conn: Connection = {
+    val c = new AthenaConnection(DriverManager.getConnection(config.url, config.options))
+    config.readOnly.foreach(c.setReadOnly)
+    c
+  }
 
   def getTmpStagingDir: Option[String] = config.getTmpStagingDir
 
