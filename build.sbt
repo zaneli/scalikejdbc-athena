@@ -4,7 +4,7 @@ name := "scalikejdbc-athena"
 
 version := "0.2.0"
 
-scalaVersion := "2.12.7"
+scalaVersion := "2.12.8"
 
 libraryDependencies ++= Seq(
   "org.scalikejdbc" %% "scalikejdbc" % "3.3.1" % Provided,
