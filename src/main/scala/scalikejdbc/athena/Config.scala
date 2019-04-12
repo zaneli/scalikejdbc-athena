@@ -20,11 +20,12 @@ class Config(dbName: Any) {
 
   private[this] val optionalNames = Seq(
     AwsCredentialsProviderArguments, AwsCredentialsProviderClass, BinaryColumnLength, ComplexTypeColumnLength,
-    ConnectionTest, ConnectTimeout, LogLevel, LogPath, MaxCatalogNameLength, MaxColumnNameLength, MaxErrorRetry,
-    MaxSchemaNameLength, MaxTableNameLength, MetadataRetrievalMethod, NonProxyHosts, PWD, PreemptiveBasicProxyAuth,
+    ConnectionTest, ConnectTimeout, IdPHost, IdPPort, LogLevel, LogPath, MaxCatalogNameLength, MaxColumnNameLength,
+    MaxErrorRetry, MaxQueryExecutionPollingInterval, MaxSchemaNameLength, MaxStreamErrorRetry, MaxTableNameLength,
+    MetadataRetrievalMethod, NonProxyHosts, Password, PWD, PreemptiveBasicProxyAuth, PreferredRole, Profile,
     ProxyDomain, ProxyHost, ProxyPort, ProxyPWD, ProxyUID, ProxyWorkstation, RowsToFetchPerBlock, S3OutputEncKMSKey,
-    S3OutputEncOption, Schema, SocketTimeout, StringColumnLength, UseArraySupport, OUseAwsLogger,
-    UseResultsetStreaming, UID
+    S3OutputEncOption, Schema, SocketTimeout, SSLInsecure, StringColumnLength, UseArraySupport, UseAwsLogger,
+    User, UID, UseResultsetStreaming, Workgroup
   )
 
   private[this] val attributeNames = Seq(Url, Driver, ReadOnly, S3OutputLocation, S3OutputLocationPrefix) ++ optionalNames
@@ -81,17 +82,24 @@ object Config {
   val ComplexTypeColumnLength = "ComplexTypeColumnLength"
   val ConnectionTest = "ConnectionTest"
   val ConnectTimeout = "ConnectTimeout"
+  val IdPHost = "IdP_Host"
+  val IdPPort = "IdP_Port"
   val LogLevel = "LogLevel"
   val LogPath = "LogPath"
   val MaxCatalogNameLength = "MaxCatalogNameLength"
   val MaxColumnNameLength = "MaxColumnNameLength"
   val MaxErrorRetry = "MaxErrorRetry"
+  val MaxQueryExecutionPollingInterval = "MaxQueryExecutionPollingInterval"
   val MaxSchemaNameLength = "MaxSchemaNameLength"
+  val MaxStreamErrorRetry = "MaxStreamErrorRetry"
   val MaxTableNameLength = "MaxTableNameLength"
   val MetadataRetrievalMethod = "MetadataRetrievalMethod"
   val NonProxyHosts = "NonProxyHosts"
+  val Password = "Password"
   val PWD = "PWD"
   val PreemptiveBasicProxyAuth = "PreemptiveBasicProxyAuth"
+  val PreferredRole = "preferred_role"
+  val Profile = "Profile"
   val ProxyDomain = "ProxyDomain"
   val ProxyHost = "ProxyHost"
   val ProxyPort = "ProxyPort"
@@ -103,11 +111,14 @@ object Config {
   val S3OutputEncOption = "S3OutputEncOption"
   val Schema = "Schema"
   val SocketTimeout = "SocketTimeout"
+  val SSLInsecure = "SSL_Insecure"
   val StringColumnLength = "StringColumnLength"
   val UseArraySupport = "UseArraySupport"
-  val OUseAwsLogger = "OUseAwsLogger"
-  val UseResultsetStreaming = "UseResultsetStreaming"
+  val UseAwsLogger = "UseAwsLogger"
+  val User = "User"
   val UID = "UID"
+  val UseResultsetStreaming = "UseResultsetStreaming"
+  val Workgroup = "Workgroup"
 }
 
 class ConfigException(message: String) extends Exception(message)
