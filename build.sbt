@@ -2,7 +2,7 @@ organization := "com.zaneli"
 
 name := "scalikejdbc-athena"
 
-version := "0.2.1"
+version := "0.2.2"
 
 val Scala212 = "2.12.8"
 
