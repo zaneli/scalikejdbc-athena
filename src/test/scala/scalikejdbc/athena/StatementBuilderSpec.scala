@@ -1,8 +1,8 @@
 package scalikejdbc.athena
 
-import org.scalatest.FunSpec
+import org.scalatest.funspec.AnyFunSpec
 
-class StatementBuilderSpec extends FunSpec {
+class StatementBuilderSpec extends AnyFunSpec {
 
   describe("StatementBuilder") {
     it("no param") {

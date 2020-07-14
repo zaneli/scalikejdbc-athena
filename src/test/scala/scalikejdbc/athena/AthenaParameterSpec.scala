@@ -2,9 +2,9 @@ package scalikejdbc.athena
 
 import java.time.{ZoneId, ZonedDateTime}
 
-import org.scalatest.FunSpec
+import org.scalatest.funspec.AnyFunSpec
 
-class AthenaParameterSpec extends FunSpec {
+class AthenaParameterSpec extends AnyFunSpec {
 
   describe("AthenaParameter.Int") {
     it("pos") {

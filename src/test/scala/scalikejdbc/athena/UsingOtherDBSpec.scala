@@ -2,10 +2,11 @@ package scalikejdbc.athena
 
 import java.sql.DriverManager
 
-import org.scalatest.{BeforeAndAfter, FunSpec}
+import org.scalatest.BeforeAndAfter
+import org.scalatest.funspec.AnyFunSpec
 import scalikejdbc._
 
-class UsingOtherDBSpec extends FunSpec with BeforeAndAfter {
+class UsingOtherDBSpec extends AnyFunSpec with BeforeAndAfter {
   // call this method to prevent stopping test on the way, but i don't know reason why...
   DriverManager.getDrivers
 

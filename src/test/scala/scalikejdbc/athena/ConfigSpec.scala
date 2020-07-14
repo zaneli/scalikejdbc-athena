@@ -1,8 +1,9 @@
 package scalikejdbc.athena
 
-import org.scalatest.{FunSpec, OptionValues}
+import org.scalatest.OptionValues
+import org.scalatest.funspec.AnyFunSpec
 
-class ConfigSpec extends FunSpec with OptionValues {
+class ConfigSpec extends AnyFunSpec with OptionValues {
 
   describe("Config") {
     it("default db") {

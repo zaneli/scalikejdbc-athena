@@ -15,7 +15,7 @@ val scalikejdbcVersion = "3.4.0"
 libraryDependencies ++= Seq(
   "org.scalikejdbc" %% "scalikejdbc" % scalikejdbcVersion % Provided,
   "com.typesafe" % "config" % "1.4.0" % Provided,
-  "org.scalatest" %% "scalatest" % "3.1.1" % Test,
+  "org.scalatest" %% "scalatest-funspec" % "3.2.0" % Test,
   "org.scalikejdbc" %% "scalikejdbc-syntax-support-macro" % scalikejdbcVersion % Test,
   "com.h2database" % "h2" % "1.4.200" % Test
 )
