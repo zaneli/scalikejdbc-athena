@@ -17,7 +17,7 @@ Library for using [Amazon Athena](https://aws.amazon.com/athena/) JDBC Driver wi
 ```scala
 libraryDependencies ++= Seq(
   "org.scalikejdbc" %% "scalikejdbc" % "3.4.0",
-  "com.zaneli" %% "scalikejdbc-athena" % "0.2.3"
+  "com.zaneli" %% "scalikejdbc-athena" % "0.2.4"
 )
 ```
 
