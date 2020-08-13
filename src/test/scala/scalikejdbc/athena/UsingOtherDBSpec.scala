@@ -1,6 +1,7 @@
 package scalikejdbc.athena
 
 import java.sql.DriverManager
+import java.time.{ZoneId, ZonedDateTime}
 
 import org.scalatest.BeforeAndAfter
 import org.scalatest.funspec.AnyFunSpec
@@ -12,7 +13,7 @@ class UsingOtherDBSpec extends AnyFunSpec with BeforeAndAfter {
 
   before {
     NamedDB(User.connectionPoolName).athena { implicit s =>
-      sql"""create table user (id int, name varchar(10))""".execute().apply()
+      sql"""create table user (id int, name varchar(10), created_at timestamp)""".execute().apply()
     }
   }
 
@@ -23,23 +24,26 @@ class UsingOtherDBSpec extends AnyFunSpec with BeforeAndAfter {
   }
 
   describe("use h2db") {
-    val users = Seq(User(1, "zaneli"), User(2, "za'ne'li"), User(3, "za?ne?li"))
+    val time1 = ZonedDateTime.of(2020,8,13,10,20,30,0, ZoneId.of("Asia/Tokyo"))
+    val time2 = ZonedDateTime.of(2020,8,13,11,20,30,0, ZoneId.of("Asia/Tokyo"))
+    val time3 = ZonedDateTime.of(2020,8,13,12,20,30,0, ZoneId.of("Asia/Tokyo"))
+    val users = Seq(User(1, "zaneli", time1), User(2, "za'ne'li", time2), User(3, "za?ne?li", time3))
 
     it("use SQLInterpolation") {
       val results = NamedDB(User.connectionPoolName).athena { implicit s =>
 
-        val params = sqls.csv(users.map(u => sqls"(${u.id}, ${u.name})"): _*)
+        val params = sqls.csv(users.map(u => sqls"(${u.id}, ${u.name}, ${u.createdAt})"): _*)
         val count = sql"""insert into user values $params""".executeUpdate().apply()
         assert(count === users.size)
 
-        sql"""select id, name from user order by id""".map(r => User(r.int("id"), r.string("name"))).list().apply()
+        sql"""select id, name, created_at from user order by id""".map(r => User(r.int("id"), r.string("name"), r.zonedDateTime("created_at"))).list().apply()
       }
       assert(users === results)
     }
     it("use QueryDSL") {
       val results = NamedDB(User.connectionPoolName).athena { implicit s =>
         val count = users.map { user =>
-          withSQL { insert.into(User).values(user.id, user.name) }.update().apply()
+          withSQL { insert.into(User).values(user.id, user.name, user.createdAt) }.update().apply()
         }.sum
         assert(count === users.size)
 
@@ -50,10 +54,10 @@ class UsingOtherDBSpec extends AnyFunSpec with BeforeAndAfter {
     }
   }
 
-  case class User(id: Long, name: String)
+  case class User(id: Long, name: String, createdAt: ZonedDateTime)
   object User extends SQLSyntaxSupport[User] {
     override lazy val connectionPoolName = 'h2
-    override lazy val columnNames = Seq("id", "name")
+    override lazy val columnNames = Seq("id", "name", "created_at")
     def apply(n: ResultName[User])(rs: WrappedResultSet): User = autoConstruct(rs, n)
   }
 }

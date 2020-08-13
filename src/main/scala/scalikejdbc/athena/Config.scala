@@ -28,7 +28,7 @@ class Config(dbName: Any) {
     User, UID, UseResultsetStreaming, Workgroup
   )
 
-  private[this] val attributeNames = Seq(Url, Driver, ReadOnly, S3OutputLocation, S3OutputLocationPrefix) ++ optionalNames
+  private[this] val attributeNames = Seq(Url, Driver, ReadOnly, TimeZone, S3OutputLocation, S3OutputLocationPrefix) ++ optionalNames
 
   private[this] val map = if (config.hasPath(prefix)) {
     config.getConfig(prefix).entrySet.asScala.map(_.getKey).collect {
@@ -42,8 +42,9 @@ class Config(dbName: Any) {
   map.get(Driver).foreach(Class.forName)
 
   private[athena] lazy val url: String = map.getOrElse(Url, throw new ConfigException(s"no configuration setting: key=$prefix.$Url"))
-
+  private[athena] lazy val driver: String = map.getOrElse(Driver, throw new ConfigException(s"no configuration setting: key=$prefix.$Driver"))
   private[athena] lazy val readOnly: Option[Boolean] = map.get(ReadOnly).flatMap(v => Try(v.toBoolean).toOption)
+  private[athena] lazy val timeZone: Option[String] = map.get(TimeZone)
 
   private[athena] lazy val options: Properties = {
     val p = new Properties()
@@ -72,6 +73,7 @@ object Config {
   val Url = "url"
   val Driver = "driver"
   val ReadOnly = "readOnly"
+  val TimeZone = "timeZone"
 
   val S3OutputLocation = "S3OutputLocation"
   val S3OutputLocationPrefix = "S3OutputLocationPrefix"

@@ -13,6 +13,7 @@ class ConfigSpec extends AnyFunSpec with OptionValues {
       assert(config.options.getProperty("LogPath") === "logs/application.log")
       assert(config.getTmpStagingDir.isEmpty)
       assert(config.readOnly.value === false)
+      assert(config.timeZone.isEmpty)
     }
     it("named db") {
       val config = new Config('athena)
@@ -22,6 +23,7 @@ class ConfigSpec extends AnyFunSpec with OptionValues {
       assert(config.options.containsKey("LogPath") === false)
       assert(config.getTmpStagingDir.value === config.options.getProperty("S3OutputLocation"))
       assert(config.readOnly.value === true)
+      assert(config.timeZone.value === "UTC")
     }
     it("invalid settings") {
       val config = new Config('duplicated)
