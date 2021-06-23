@@ -1,7 +1,7 @@
 sonatypeProfileName := "com.zaneli"
 
 publishMavenStyle := true
-publishArtifact in Test := false
+Test / publishArtifact := false
 
 licenses := Seq("APL2" -> url("http://www.apache.org/licenses/LICENSE-2.0.txt"))
 
