@@ -1,8 +1,8 @@
 language: scala
 sudo: false
 scala:
-  - 2.12.12
-  - 2.13.3
+  - 2.12.14
+  - 2.13.6
 before_script:
   - mkdir lib
   - curl -L -o AthenaJDBC41_2.0.7.jar https://s3.amazonaws.com/athena-downloads/drivers/JDBC/SimbaAthenaJDBC_2.0.7/AthenaJDBC41_2.0.7.jar
