@@ -16,7 +16,7 @@ class ConfigSpec extends AnyFunSpec with OptionValues {
       assert(config.timeZone.isEmpty)
     }
     it("named db") {
-      val config = new Config('athena)
+      val config = new Config("athena")
       assert(config.url === "jdbc:awsathena://AwsRegion=ap-southeast-1")
       assert(config.options.getProperty("S3OutputLocation") !== "s3://query-results-bucket/folder")
       assert(config.options.getProperty("S3OutputLocation").startsWith("s3://query-results-bucket/folder") === true)
@@ -26,12 +26,12 @@ class ConfigSpec extends AnyFunSpec with OptionValues {
       assert(config.timeZone.value === "UTC")
     }
     it("invalid settings") {
-      val config = new Config('duplicated)
+      val config = new Config("duplicated")
       assertThrows[ConfigException](config.options)
       assert(config.readOnly.isEmpty)
     }
     it("unconfigured db") {
-      assertThrows[ConfigException](new Config('unconfigured))
+      assertThrows[ConfigException](new Config("unconfigured"))
     }
     it("unsupported db name type") {
       assertThrows[ConfigException](new Config("athena".toCharArray))

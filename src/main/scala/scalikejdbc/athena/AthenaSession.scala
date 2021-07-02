@@ -7,7 +7,7 @@ import scalikejdbc.{DBConnectionAttributes, DBSession, SettingsProvider, TimeZon
 
 class AthenaSession(config: Config) extends DBSession {
 
-  override private[scalikejdbc] lazy val conn: Connection = {
+  override private[scalikejdbc] val conn: Connection = {
     val c = new AthenaConnection(DriverManager.getConnection(config.url, config.options))
     config.readOnly.foreach(c.setReadOnly)
     c
