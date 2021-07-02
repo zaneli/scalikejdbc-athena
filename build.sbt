@@ -8,9 +8,9 @@ val Scala212 = "2.12.14"
 
 scalaVersion := Scala212
 
-crossScalaVersions := Seq(Scala212, "2.13.6")
+crossScalaVersions := Seq(Scala212, "2.13.6", "3.0.1-RC2")
 
-val scalikejdbcVersion = "3.5.0"
+val scalikejdbcVersion = "4.0.0-RC1"
 
 libraryDependencies ++= Seq(
   "org.scalikejdbc" %% "scalikejdbc" % scalikejdbcVersion % Provided,
