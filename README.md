@@ -9,8 +9,8 @@ Library for using [Amazon Athena](https://aws.amazon.com/athena/) JDBC Driver wi
 - Download [Athena JDBC Driver](https://docs.aws.amazon.com/athena/latest/ug/connect-with-jdbc.html)
 ```sh
 > mkdir lib
-> curl -L -O https://s3.amazonaws.com/athena-downloads/drivers/JDBC/SimbaAthenaJDBC_2.0.7/AthenaJDBC41_2.0.7.jar
-> mv AthenaJDBC41_2.0.7.jar lib/
+> curl -L -O https://s3.amazonaws.com/athena-downloads/drivers/JDBC/SimbaAthenaJDBC-2.0.23.1000/AthenaJDBC42.jar
+> mv AthenaJDBC42.jar lib/
 ```
 
 - Add library dependencies to sbt build settings
