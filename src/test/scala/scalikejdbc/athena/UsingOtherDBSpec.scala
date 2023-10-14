@@ -13,13 +13,13 @@ class UsingOtherDBSpec extends AnyFunSpec with BeforeAndAfter {
 
   before {
     NamedDB(User.connectionPoolName).athena { implicit s =>
-      sql"""create table user (id int, name varchar(10), created_at timestamp)""".execute.apply()
+      sql"""create table users (id int, name varchar(10), created_at timestamp)""".execute.apply()
     }
   }
 
   after {
     NamedDB(User.connectionPoolName).athena { implicit s =>
-      sql"""drop table user""".execute.apply()
+      sql"""drop table users""".execute.apply()
     }
   }
 
@@ -33,10 +33,10 @@ class UsingOtherDBSpec extends AnyFunSpec with BeforeAndAfter {
       val results = NamedDB(User.connectionPoolName).athena { implicit s =>
 
         val params = sqls.csv(users.map(u => sqls"(${u.id}, ${u.name}, ${u.createdAt})"): _*)
-        val count = sql"""insert into user values $params""".executeUpdate.apply()
+        val count = sql"""insert into users values $params""".executeUpdate.apply()
         assert(count === users.size)
 
-        sql"""select id, name, created_at from user order by id""".map(r => User(r.int("id"), r.string("name"), r.zonedDateTime("created_at"))).list.apply()
+        sql"""select id, name, created_at from users order by id""".map(r => User(r.int("id"), r.string("name"), r.zonedDateTime("created_at"))).list.apply()
       }
       assert(users === results)
     }
@@ -57,6 +57,7 @@ class UsingOtherDBSpec extends AnyFunSpec with BeforeAndAfter {
   case class User(id: Long, name: String, createdAt: ZonedDateTime)
   object User extends SQLSyntaxSupport[User] {
     override lazy val connectionPoolName = "h2"
+    override lazy val tableName = "users"
     override lazy val columnNames = Seq("id", "name", "created_at")
     def apply(n: ResultName[User])(rs: WrappedResultSet): User = autoConstruct(rs, n)
   }
