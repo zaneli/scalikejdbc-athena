@@ -21,7 +21,7 @@ jobs:
           java-version: ${{ matrix.java }}
           distribution: adopt
       - name: Download Athena JDBC Driver
-        run: mkdir lib && curl -L -o lib/AthenaJDBC41_2.0.7.jar https://s3.amazonaws.com/athena-downloads/drivers/JDBC/SimbaAthenaJDBC_2.0.7/AthenaJDBC41_2.0.7.jar
+        run: mkdir lib && curl -L -o lib/AthenaJDBC42-2.1.1.1000.jar https://downloads.athena.us-east-1.amazonaws.com/drivers/JDBC/SimbaAthenaJDBC-2.1.1.1000/AthenaJDBC42-2.1.1.1000.jar
         shell: bash
       - name: Test
         run: sbt -v -Dfile.encoding=UTF-8 ++${{ matrix.scala }} test

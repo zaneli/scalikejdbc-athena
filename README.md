@@ -6,11 +6,14 @@ Library for using [Amazon Athena](https://aws.amazon.com/athena/) JDBC Driver wi
 
 ## setup
 
-- Download [Athena JDBC Driver](https://docs.aws.amazon.com/athena/latest/ug/connect-with-jdbc.html)
+- Download [Athena JDBC 2.x driver](https://docs.aws.amazon.com/athena/latest/ug/jdbc-v2.html)
+  - This library is basically depends on Athena JDBC 2.x driver.  
+    Choose your preferred or latest version in 2.x.  
+    If you encounter problems with a particular version, please feel free to [report it](https://github.com/zaneli/scalikejdbc-athena/issues).
 ```sh
 > mkdir lib
-> curl -L -O https://s3.amazonaws.com/athena-downloads/drivers/JDBC/SimbaAthenaJDBC_2.0.7/AthenaJDBC41_2.0.7.jar
-> mv AthenaJDBC41_2.0.7.jar lib/
+> curl -L -O https://downloads.athena.us-east-1.amazonaws.com/drivers/JDBC/SimbaAthenaJDBC-2.1.1.1000/AthenaJDBC42-2.1.1.1000.jar
+> mv AthenaJDBC42-2.1.1.1000.jar lib/
 ```
 
 - Add library dependencies to sbt build settings
