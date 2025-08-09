@@ -6,14 +6,14 @@ Library for using [Amazon Athena](https://aws.amazon.com/athena/) JDBC Driver wi
 
 ## setup
 
-- Download [Athena JDBC 2.x driver](https://docs.aws.amazon.com/athena/latest/ug/jdbc-v2.html)
-  - This library is basically depends on Athena JDBC 2.x driver.  
-    Choose your preferred or latest version in 2.x.  
+- Download Athena JDBC driver
+  - This library supports both Athena (https://docs.aws.amazon.com/athena/latest/ug/jdbc-v3-driver.html) and https://docs.aws.amazon.com/athena/latest/ug/jdbc-v2.html.  
     If you encounter problems with a particular version, please feel free to [report it](https://github.com/zaneli/scalikejdbc-athena/issues).
 ```sh
 > mkdir lib
-> curl -L -O https://downloads.athena.us-east-1.amazonaws.com/drivers/JDBC/SimbaAthenaJDBC-2.1.1.1000/AthenaJDBC42-2.1.1.1000.jar
-> mv AthenaJDBC42-2.1.1.1000.jar lib/
+> pushd lib
+> curl -L -O https://downloads.athena.us-east-1.amazonaws.com/drivers/JDBC/3.5.1/athena-jdbc-3.5.1-with-dependencies.jar
+> popd
 ```
 
 - Add library dependencies to sbt build settings
@@ -27,6 +27,20 @@ libraryDependencies ++= Seq(
 - Configure the JDBC Driver Options on `resources/application.conf`
 
 ```
+# v3 driver
+athena {
+  default {
+    driver="com.amazon.athena.jdbc.AthenaDriver"
+    url="jdbc:athena://AwsRegion={REGION}"
+    readOnly="false"
+    S3OutputLocation="s3://query-results-bucket/folder/"
+    AwsCredentialsProviderClass="DefaultChain"
+    LogPath="logs/application.log"
+    LogLevel=3
+  }
+}
+
+# v2 driver
 athena {
   default {
     driver="com.simba.athena.jdbc.Driver"
@@ -66,11 +80,11 @@ DB.athena { implicit s =>
 ```
 athena {
   default {
-    driver="com.simba.athena.jdbc.Driver"
-    url="jdbc:awsathena://AwsRegion={REGION}"
+    driver="com.amazon.athena.jdbc.AthenaDriver"
+    url="jdbc:athena://AwsRegion={REGION}"
     readOnly="false"
     S3OutputLocationPrefix="s3://query-results-bucket/folder"
-    AwsCredentialsProviderClass="com.simba.athena.amazonaws.auth.profile.ProfileCredentialsProvider"
+    AwsCredentialsProviderClass="DefaultChain"
     LogPath="logs/application.log"
     LogLevel=3
   }
