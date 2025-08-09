@@ -31,7 +31,7 @@ libraryDependencies ++= Seq(
 athena {
   default {
     driver="com.amazon.athena.jdbc.AthenaDriver"
-    url="jdbc:awsathena://AwsRegion={REGION}"
+    url="jdbc:athena://AwsRegion={REGION}"
     readOnly="false"
     S3OutputLocation="s3://query-results-bucket/folder/"
     AwsCredentialsProviderClass="DefaultChain"
@@ -81,7 +81,7 @@ DB.athena { implicit s =>
 athena {
   default {
     driver="com.amazon.athena.jdbc.AthenaDriver"
-    url="jdbc:awsathena://AwsRegion={REGION}"
+    url="jdbc:athena://AwsRegion={REGION}"
     readOnly="false"
     S3OutputLocationPrefix="s3://query-results-bucket/folder"
     AwsCredentialsProviderClass="DefaultChain"
