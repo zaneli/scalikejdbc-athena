@@ -21,7 +21,7 @@ jobs:
           java-version: ${{ matrix.java }}
           distribution: adopt
       - name: Download Athena JDBC v3 Driver
-        run: mkdir -p lib && curl -L -o lib/athena-v3.jar curl -L -O https://downloads.athena.us-east-1.amazonaws.com/drivers/JDBC/3.5.1/athena-jdbc-3.5.1-with-dependencies.jar
+        run: mkdir -p lib && curl -L -o lib/athena-v3.jar https://downloads.athena.us-east-1.amazonaws.com/drivers/JDBC/3.5.1/athena-jdbc-3.5.1-with-dependencies.jar
         shell: bash
       - name: Download Athena JDBC v2 Driver
         run: mkdir -p lib && curl -L -o lib/athena-v2.jar https://downloads.athena.us-east-1.amazonaws.com/drivers/JDBC/SimbaAthenaJDBC-2.1.1.1000/AthenaJDBC42-2.1.1.1000.jar
