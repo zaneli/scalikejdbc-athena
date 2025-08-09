@@ -120,7 +120,7 @@ object Config {
   val User = "User"
   val UID = "UID"
   val UseResultsetStreaming = "UseResultsetStreaming"
-  val Workgroup = "Workgroup"
+  val Workgroup = "WorkGroup"
 }
 
 class ConfigException(message: String) extends Exception(message)
