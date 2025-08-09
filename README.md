@@ -6,9 +6,8 @@ Library for using [Amazon Athena](https://aws.amazon.com/athena/) JDBC Driver wi
 
 ## setup
 
-- Download [Athena JDBC 3.x driver](https://docs.aws.amazon.com/athena/latest/ug/jdbc-v3-driver.html)
-  - This library is basically depends on Athena JDBC 3.x driver.  
-    Choose your preferred or latest version in 3.x.  
+- Download Athena JDBC 3.x driver
+  - This library supports both Athena (https://docs.aws.amazon.com/athena/latest/ug/jdbc-v3-driver.html) and https://docs.aws.amazon.com/athena/latest/ug/jdbc-v2.html.  
     If you encounter problems with a particular version, please feel free to [report it](https://github.com/zaneli/scalikejdbc-athena/issues).
 ```sh
 > mkdir lib
@@ -28,6 +27,7 @@ libraryDependencies ++= Seq(
 - Configure the JDBC Driver Options on `resources/application.conf`
 
 ```
+# v3 driver
 athena {
   default {
     driver="com.amazon.athena.jdbc.AthenaDriver"
@@ -35,6 +35,19 @@ athena {
     readOnly="false"
     S3OutputLocation="s3://query-results-bucket/folder/"
     AwsCredentialsProviderClass="DefaultChain"
+    LogPath="logs/application.log"
+    LogLevel=3
+  }
+}
+
+# v2 driver
+athena {
+  default {
+    driver="com.simba.athena.jdbc.Driver"
+    url="jdbc:awsathena://AwsRegion={REGION}"
+    readOnly="false"
+    S3OutputLocation="s3://query-results-bucket/folder/"
+    AwsCredentialsProviderClass="com.simba.athena.amazonaws.auth.profile.ProfileCredentialsProvider"
     LogPath="logs/application.log"
     LogLevel=3
   }
