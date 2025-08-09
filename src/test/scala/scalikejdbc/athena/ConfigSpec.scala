@@ -8,7 +8,7 @@ class ConfigSpec extends AnyFunSpec with OptionValues {
   describe("Config") {
     it("default db") {
       val config = new Config("default")
-      assert(config.url === "jdbc:awsathena://AwsRegion=us-east-2")
+      assert(config.url === "jdbc:athena://AwsRegion=us-east-2")
       assert(config.options.getProperty("S3OutputLocation") === "s3://query-results-bucket/folder/")
       assert(config.options.getProperty("LogPath") === "logs/application.log")
       assert(config.getTmpStagingDir.isEmpty)
@@ -17,7 +17,7 @@ class ConfigSpec extends AnyFunSpec with OptionValues {
     }
     it("named db") {
       val config = new Config("athena")
-      assert(config.url === "jdbc:awsathena://AwsRegion=ap-southeast-1")
+      assert(config.url === "jdbc:athena://AwsRegion=ap-southeast-1")
       assert(config.options.getProperty("S3OutputLocation") !== "s3://query-results-bucket/folder")
       assert(config.options.getProperty("S3OutputLocation").startsWith("s3://query-results-bucket/folder") === true)
       assert(config.options.containsKey("LogPath") === false)
