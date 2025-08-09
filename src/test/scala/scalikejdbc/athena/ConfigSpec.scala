@@ -15,6 +15,19 @@ class ConfigSpec extends AnyFunSpec with OptionValues {
       assert(config.readOnly.value === false)
       assert(config.timeZone.isEmpty)
     }
+    it("workgropup") {
+      val config = new Config("workgroup-only")
+      assert(config.url === "jdbc:athena://AwsRegion=us-east-2")
+      assert(config.options.getProperty("S3OutputLocation") === null)
+      assert(config.options.getProperty("WorkGroup") === "my-own-workgroup")
+      assert(config.options.getProperty("LogPath") === "logs/application.log")
+      assert(config.getTmpStagingDir.isEmpty)
+      assert(config.readOnly.value === false)
+      assert(config.timeZone.isEmpty)
+    }
+    it("primary workgroupRequires S3OutputLocation") {
+      assertThrows[ConfigException](new Config("workgroup-primary").options)
+    }
     it("named db") {
       val config = new Config("athena")
       assert(config.url === "jdbc:athena://AwsRegion=ap-southeast-1")
@@ -35,7 +48,8 @@ class ConfigSpec extends AnyFunSpec with OptionValues {
     it("v2") {
       val config = new Config("v2.default")
       assert(config.url === "jdbc:awsathena://AwsRegion=us-east-2")
-      assert(config.options.getProperty("S3OutputLocation") === "s3://query-results-bucket/folder/")
+      assert(config.options.getProperty("S3OutputLocation") === null)
+      assert(config.options.getProperty("Workgroup") === "my-own-workgroup")
       assert(config.options.getProperty("LogPath") === "logs/application.log")
       assert(config.getTmpStagingDir.isEmpty)
       assert(config.readOnly.value === false)

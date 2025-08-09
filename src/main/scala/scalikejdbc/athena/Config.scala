@@ -8,6 +8,7 @@ import scala.collection.JavaConverters._
 import scala.util.Try
 
 class Config(dbName: Any) {
+
   import Config._
 
   private[this] val prefix = "athena." + (dbName match {
@@ -36,11 +37,16 @@ class Config(dbName: Any) {
 
   private[athena] lazy val options: Properties = {
     val p = new Properties()
-    (map.get(S3OutputLocation), map.get(S3OutputLocationPrefix)) match {
-      case (Some(d), Some(p)) => throw new ConfigException(s"duplicate settings: $prefix.$S3OutputLocation=$d, $prefix.$S3OutputLocationPrefix=$p")
-      case (Some(v), _) => p.setProperty(S3OutputLocation, v)
-      case (_, Some(v)) => p.setProperty(S3OutputLocation, s"$v/${UUID.randomUUID()}")
-      case _ => throw new ConfigException(s"no configuration setting: key=$prefix.$S3OutputLocation, $prefix.$S3OutputLocationPrefix")
+    // driver v3:WorkGroup, v2:Workgroup
+    // If workgroups is missing (fallback to primary workgroup), S3OutputLocation is mandatory.
+    // However, if any user-defined workgroup is specified, S3OutputLocation is optional.
+    if (!map.get("WorkGroup").orElse(map.get("Workgroup")).exists(_ != "primary")) {
+      (map.get(S3OutputLocation), map.get(S3OutputLocationPrefix)) match {
+        case (Some(d), Some(p)) => throw new ConfigException(s"duplicate settings: $prefix.$S3OutputLocation=$d, $prefix.$S3OutputLocationPrefix=$p")
+        case (Some(v), _) => p.setProperty(S3OutputLocation, v)
+        case (_, Some(v)) => p.setProperty(S3OutputLocation, s"$v/${UUID.randomUUID()}")
+        case _ => throw new ConfigException(s"no configuration setting: key=$prefix.$S3OutputLocation, $prefix.$S3OutputLocationPrefix")
+      }
     }
     map.foreach { entry =>
       val (name, value) = entry
