@@ -1,6 +1,5 @@
 package scalikejdbc.athena
 
-import java.sql.DriverManager
 import java.time.{ZoneId, ZonedDateTime}
 
 import org.scalatest.BeforeAndAfter
@@ -8,8 +7,6 @@ import org.scalatest.funspec.AnyFunSpec
 import scalikejdbc._
 
 class UsingOtherDBSpec extends AnyFunSpec with BeforeAndAfter {
-  // call this method to prevent stopping test on the way, but i don't know reason why...
-  DriverManager.getDrivers
 
   before {
     NamedDB(User.connectionPoolName).athena { implicit s =>
