@@ -21,3 +21,8 @@ libraryDependencies ++= Seq(
 )
 
 publishTo := sonatypePublishTo.value
+
+Test / testOptions += Tests.Setup { () =>
+  // Call this method to prevent stopping test on the way, but I don't know reason why...
+  java.sql.DriverManager.getDrivers
+}
