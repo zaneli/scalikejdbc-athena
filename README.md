@@ -11,9 +11,7 @@ Library for using [Amazon Athena](https://aws.amazon.com/athena/) JDBC Driver wi
     If you encounter problems with a particular version, please feel free to [report it](https://github.com/zaneli/scalikejdbc-athena/issues).
 ```sh
 > mkdir lib
-> pushd lib
-> curl -L -O https://downloads.athena.us-east-1.amazonaws.com/drivers/JDBC/3.5.1/athena-jdbc-3.5.1-with-dependencies.jar
-> popd
+> curl -L -o lib/athena-vjdbc-3.5.1-with-dependencies.jar https://downloads.athena.us-east-1.amazonaws.com/drivers/JDBC/3.5.1/athena-jdbc-3.5.1-with-dependencies.jar
 ```
 
 - Add library dependencies to sbt build settings
