@@ -25,6 +25,13 @@ class ConfigSpec extends AnyFunSpec with OptionValues {
       assert(config.readOnly.value === true)
       assert(config.timeZone.value === "UTC")
     }
+    it("v3") {
+      // This test ensures that new config parameters is supported
+      val config = new Config("v3params")
+      assert(config.url === "jdbc:athena://AwsRegion=ap-southeast-1")
+      assert(config.options.getProperty("DataZoneEnvironmentId") === "123")
+      assert(config.options.getProperty("DataZoneDomainRegion") === "us-west-2")
+    }
     it("invalid settings") {
       val config = new Config("duplicated")
       assertThrows[ConfigException](config.options)

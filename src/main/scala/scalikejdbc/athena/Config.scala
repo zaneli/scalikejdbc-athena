@@ -18,22 +18,10 @@ class Config(dbName: Any) {
 
   private[this] val config = ConfigFactory.load()
 
-  private[this] val optionalNames = Seq(
-    AwsCredentialsProviderArguments, AwsCredentialsProviderClass, BinaryColumnLength, ComplexTypeColumnLength,
-    ConnectionTest, ConnectTimeout, IdPHost, IdPPort, LogLevel, LogPath, MaxCatalogNameLength, MaxColumnNameLength,
-    MaxErrorRetry, MaxQueryExecutionPollingInterval, MaxSchemaNameLength, MaxStreamErrorRetry, MaxTableNameLength,
-    MetadataRetrievalMethod, NonProxyHosts, Password, PWD, PreemptiveBasicProxyAuth, PreferredRole, Profile,
-    ProxyDomain, ProxyHost, ProxyPort, ProxyPWD, ProxyUID, ProxyWorkstation, RowsToFetchPerBlock, S3OutputEncKMSKey,
-    S3OutputEncOption, Schema, SocketTimeout, SSLInsecure, StringColumnLength, UseArraySupport, UseAwsLogger,
-    User, UID, UseResultsetStreaming, Workgroup
-  )
-
-  private[this] val attributeNames = Seq(Url, Driver, ReadOnly, TimeZone, S3OutputLocation, S3OutputLocationPrefix) ++ optionalNames
-
   private[this] val map = if (config.hasPath(prefix)) {
-    config.getConfig(prefix).entrySet.asScala.map(_.getKey).collect {
-      case key if attributeNames.contains(key) =>
-        key -> config.getString(s"$prefix.$key")
+    config.getConfig(prefix).entrySet.asScala.map { entry =>
+      val key = entry.getKey
+      key -> config.getString(s"$prefix.$key")
     }.toMap
   } else {
     throw new ConfigException(s"no configuration setting: key=$prefix")
@@ -54,8 +42,9 @@ class Config(dbName: Any) {
       case (_, Some(v)) => p.setProperty(S3OutputLocation, s"$v/${UUID.randomUUID()}")
       case _ => throw new ConfigException(s"no configuration setting: key=$prefix.$S3OutputLocation, $prefix.$S3OutputLocationPrefix")
     }
-    optionalNames.foreach { name =>
-      map.get(name).foreach(value => p.setProperty(name, value))
+    map.foreach { entry =>
+      val (name, value) = entry
+      p.setProperty(name, value)
     }
     p
   }
@@ -78,49 +67,7 @@ object Config {
   val S3OutputLocation = "S3OutputLocation"
   val S3OutputLocationPrefix = "S3OutputLocationPrefix"
 
-  val AwsCredentialsProviderArguments = "AwsCredentialsProviderArguments"
-  val AwsCredentialsProviderClass = "AwsCredentialsProviderClass"
-  val BinaryColumnLength = "BinaryColumnLength"
-  val ComplexTypeColumnLength = "ComplexTypeColumnLength"
-  val ConnectionTest = "ConnectionTest"
-  val ConnectTimeout = "ConnectTimeout"
-  val IdPHost = "IdP_Host"
-  val IdPPort = "IdP_Port"
-  val LogLevel = "LogLevel"
-  val LogPath = "LogPath"
-  val MaxCatalogNameLength = "MaxCatalogNameLength"
-  val MaxColumnNameLength = "MaxColumnNameLength"
-  val MaxErrorRetry = "MaxErrorRetry"
-  val MaxQueryExecutionPollingInterval = "MaxQueryExecutionPollingInterval"
-  val MaxSchemaNameLength = "MaxSchemaNameLength"
-  val MaxStreamErrorRetry = "MaxStreamErrorRetry"
-  val MaxTableNameLength = "MaxTableNameLength"
-  val MetadataRetrievalMethod = "MetadataRetrievalMethod"
-  val NonProxyHosts = "NonProxyHosts"
-  val Password = "Password"
-  val PWD = "PWD"
-  val PreemptiveBasicProxyAuth = "PreemptiveBasicProxyAuth"
-  val PreferredRole = "preferred_role"
-  val Profile = "Profile"
-  val ProxyDomain = "ProxyDomain"
-  val ProxyHost = "ProxyHost"
-  val ProxyPort = "ProxyPort"
-  val ProxyPWD = "ProxyPWD"
-  val ProxyUID = "ProxyUID"
-  val ProxyWorkstation = "ProxyWorkstation"
-  val RowsToFetchPerBlock = "RowsToFetchPerBlock"
-  val S3OutputEncKMSKey = "S3OutputEncKMSKey"
-  val S3OutputEncOption = "S3OutputEncOption"
-  val Schema = "Schema"
-  val SocketTimeout = "SocketTimeout"
-  val SSLInsecure = "SSL_Insecure"
-  val StringColumnLength = "StringColumnLength"
-  val UseArraySupport = "UseArraySupport"
-  val UseAwsLogger = "UseAwsLogger"
   val User = "User"
-  val UID = "UID"
-  val UseResultsetStreaming = "UseResultsetStreaming"
-  val Workgroup = "WorkGroup"
 }
 
 class ConfigException(message: String) extends Exception(message)
