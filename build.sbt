@@ -4,20 +4,20 @@ name := "scalikejdbc-athena"
 
 version := "0.3.0"
 
-val Scala212 = "2.12.18"
+val Scala212 = "2.12.20"
 
 scalaVersion := Scala212
 
-crossScalaVersions := Seq(Scala212, "2.13.12", "3.3.1")
+crossScalaVersions := Seq(Scala212, "2.13.16", "3.7.2")
 
-val scalikejdbcVersion = "4.0.0"
+val scalikejdbcVersion = "4.3.4"
 
 libraryDependencies ++= Seq(
   "org.scalikejdbc" %% "scalikejdbc" % scalikejdbcVersion % Provided,
-  "com.typesafe" % "config" % "1.4.2" % Provided,
-  "org.scalatest" %% "scalatest-funspec" % "3.2.17" % Test,
+  "com.typesafe" % "config" % "1.4.3" % Provided,
+  "org.scalatest" %% "scalatest-funspec" % "3.2.19" % Test,
   "org.scalikejdbc" %% "scalikejdbc-syntax-support-macro" % scalikejdbcVersion % Test,
-  "com.h2database" % "h2" % "2.2.224" % Test
+  "com.h2database" % "h2" % "2.3.232" % Test
 )
 
 publishTo := sonatypePublishTo.value
