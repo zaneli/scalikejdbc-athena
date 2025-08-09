@@ -58,7 +58,7 @@ class Config(dbName: Any) {
   }
 }
 
-object Config {
+private object Config {
   val Url = "url"
   val Driver = "driver"
   val ReadOnly = "readOnly"
