@@ -19,8 +19,8 @@ Library for using [Amazon Athena](https://aws.amazon.com/athena/) JDBC Driver wi
 - Add library dependencies to sbt build settings
 ```scala
 libraryDependencies ++= Seq(
-  "org.scalikejdbc" %% "scalikejdbc" % "4.0.0",
-  "com.zaneli" %% "scalikejdbc-athena" % "0.3.0"
+  "org.scalikejdbc" %% "scalikejdbc" % "4.3.4",
+  "com.zaneli" %% "scalikejdbc-athena" % "0.4.0"
 )
 ```
 
