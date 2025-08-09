@@ -7,7 +7,7 @@ Library for using [Amazon Athena](https://aws.amazon.com/athena/) JDBC Driver wi
 ## setup
 
 - Download Athena JDBC driver
-  - This library supports both Athena (https://docs.aws.amazon.com/athena/latest/ug/jdbc-v3-driver.html) and https://docs.aws.amazon.com/athena/latest/ug/jdbc-v2.html.  
+  - This library supports both Athena JDBC [3.x](https://docs.aws.amazon.com/athena/latest/ug/jdbc-v3-driver.html) and [2.x](https://docs.aws.amazon.com/athena/latest/ug/jdbc-v2.html) driver.  
     If you encounter problems with a particular version, please feel free to [report it](https://github.com/zaneli/scalikejdbc-athena/issues).
 ```sh
 > mkdir lib
