@@ -33,7 +33,6 @@ class ConfigSpec extends AnyFunSpec with OptionValues {
       assert(config.options.getProperty("DataZoneDomainRegion") === "us-west-2")
     }
     it("v2") {
-      // This test ensures that new config parameters is supported
       val config = new Config("v2.default")
       assert(config.url === "jdbc:awsathena://AwsRegion=us-east-2")
       assert(config.options.getProperty("S3OutputLocation") === "s3://query-results-bucket/folder/")
