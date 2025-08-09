@@ -66,8 +66,6 @@ object Config {
 
   val S3OutputLocation = "S3OutputLocation"
   val S3OutputLocationPrefix = "S3OutputLocationPrefix"
-
-  val User = "User"
 }
 
 class ConfigException(message: String) extends Exception(message)
