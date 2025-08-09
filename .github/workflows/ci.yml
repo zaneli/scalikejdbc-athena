@@ -19,7 +19,7 @@ jobs:
         uses: olafurpg/setup-scala@v14
         with:
           java-version: ${{ matrix.java }}
-          distribution: adopt
+          distribution: temurin
       - name: Download Athena JDBC v3 Driver
         run: mkdir -p lib && curl -L -o lib/athena-v3.jar https://downloads.athena.us-east-1.amazonaws.com/drivers/JDBC/3.5.1/athena-jdbc-3.5.1-with-dependencies.jar
         shell: bash
