@@ -4,6 +4,10 @@ Library for using [Amazon Athena](https://aws.amazon.com/athena/) JDBC Driver wi
 
 ![CI Status](https://github.com/zaneli/scalikejdbc-athena/actions/workflows/ci.yml/badge.svg)
 
+**scalikejdbc-athena was originally developed to work around the fact that the Athena JDBC driver did not support PreparedStatement.**  
+**This limitation was likely fixed in Athena JDBC driver version 2.x or later, so in most cases this library is no longer necessary.**  
+**However, to maintain compatibility with the previous behavior — where PreparedStatement was processed via scalikejdbc-athena's custom string replacement — we provide the `useCustomPreparedStatement` parameter.**
+
 ## setup
 
 - Download Athena JDBC driver
@@ -48,6 +52,20 @@ athena {
     readOnly="false"
     S3OutputLocation="s3://query-results-bucket/folder/"
     AwsCredentialsProviderClass="com.simba.athena.amazonaws.auth.profile.ProfileCredentialsProvider"
+    LogPath="logs/application.log"
+    LogLevel=3
+  }
+}
+
+# compat PreparedStatement custom implementation
+athena {
+  default {
+    driver="com.amazon.athena.jdbc.AthenaDriver"
+    url="jdbc:athena://AwsRegion={REGION}"
+    readOnly="false"
+    useCustomPreparedStatement="true"
+    S3OutputLocation="s3://query-results-bucket/folder/"
+    AwsCredentialsProviderClass="DefaultChain"
     LogPath="logs/application.log"
     LogLevel=3
   }
