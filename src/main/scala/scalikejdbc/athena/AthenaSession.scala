@@ -8,9 +8,17 @@ import scalikejdbc.{DBConnectionAttributes, DBSession, SettingsProvider, TimeZon
 class AthenaSession(config: Config) extends DBSession {
 
   override private[scalikejdbc] val conn: Connection = {
-    val c = new AthenaConnection(DriverManager.getConnection(config.url, config.options))
-    config.readOnly.foreach(c.setReadOnly)
-    c
+    val original = DriverManager.getConnection(config.url, config.options)
+    val connection = if (config.useCustomPreparedStatement) {
+      // In older versions of the Athena JDBC driver, PreparedStatement was not supported,
+      // so we used a custom implementation as a workaround.
+      // This is generally unnecessary for Athena JDBC driver 2.x or later.
+      new AthenaConnection(original)
+    } else {
+      original
+    }
+    config.readOnly.foreach(connection.setReadOnly)
+    connection
   }
 
   def getTmpStagingDir: Option[String] = config.getTmpStagingDir

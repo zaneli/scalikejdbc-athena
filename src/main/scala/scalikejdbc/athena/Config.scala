@@ -34,6 +34,7 @@ class Config(dbName: Any) {
   private[athena] lazy val driver: String = map.getOrElse(Driver, throw new ConfigException(s"no configuration setting: key=$prefix.$Driver"))
   private[athena] lazy val readOnly: Option[Boolean] = map.get(ReadOnly).flatMap(v => Try(v.toBoolean).toOption)
   private[athena] lazy val timeZone: Option[String] = map.get(TimeZone)
+  private[athena] lazy val useCustomPreparedStatement: Boolean = map.get(UseCustomPreparedStatement).flatMap(v => Try(v.toBoolean).toOption).getOrElse(false)
 
   private[athena] lazy val options: Properties = {
     val p = new Properties()
@@ -69,6 +70,7 @@ private object Config {
   val Driver = "driver"
   val ReadOnly = "readOnly"
   val TimeZone = "timeZone"
+  val UseCustomPreparedStatement = "useCustomPreparedStatement"
 
   val S3OutputLocation = "S3OutputLocation"
   val S3OutputLocationPrefix = "S3OutputLocationPrefix"

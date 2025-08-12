@@ -14,6 +14,7 @@ class ConfigSpec extends AnyFunSpec with OptionValues {
       assert(config.getTmpStagingDir.isEmpty)
       assert(config.readOnly.value === false)
       assert(config.timeZone.isEmpty)
+      assert(config.useCustomPreparedStatement === false)
     }
     it("workgropup") {
       val config = new Config("workgroup-only")
@@ -24,6 +25,7 @@ class ConfigSpec extends AnyFunSpec with OptionValues {
       assert(config.getTmpStagingDir.isEmpty)
       assert(config.readOnly.value === false)
       assert(config.timeZone.isEmpty)
+      assert(config.useCustomPreparedStatement === false)
     }
     it("primary workgroupRequires S3OutputLocation") {
       assertThrows[ConfigException](new Config("workgroup-primary").options)
@@ -37,6 +39,7 @@ class ConfigSpec extends AnyFunSpec with OptionValues {
       assert(config.getTmpStagingDir.value === config.options.getProperty("S3OutputLocation"))
       assert(config.readOnly.value === true)
       assert(config.timeZone.value === "UTC")
+      assert(config.useCustomPreparedStatement === false)
     }
     it("v3") {
       // This test ensures that new config parameters is supported
@@ -54,6 +57,7 @@ class ConfigSpec extends AnyFunSpec with OptionValues {
       assert(config.getTmpStagingDir.isEmpty)
       assert(config.readOnly.value === false)
       assert(config.timeZone.isEmpty)
+      assert(config.useCustomPreparedStatement === false)
     }
     it("invalid settings") {
       val config = new Config("duplicated")
@@ -65,6 +69,16 @@ class ConfigSpec extends AnyFunSpec with OptionValues {
     }
     it("unsupported db name type") {
       assertThrows[ConfigException](new Config("athena".toCharArray))
+    }
+    it("compat") {
+      val config = new Config("compat")
+      assert(config.url === "jdbc:athena://AwsRegion=ap-southeast-1")
+      assert(config.options.getProperty("S3OutputLocation") === "s3://query-results-bucket/folder/")
+      assert(config.options.getProperty("LogPath") === null)
+      assert(config.getTmpStagingDir.isEmpty)
+      assert(config.readOnly.isEmpty)
+      assert(config.timeZone.isEmpty)
+      assert(config.useCustomPreparedStatement === true)
     }
   }
 }
