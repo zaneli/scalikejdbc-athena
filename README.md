@@ -40,7 +40,7 @@ athena {
     S3OutputLocation="s3://query-results-bucket/folder/"
     AwsCredentialsProviderClass="DefaultChain"
     LogPath="logs/application.log"
-    LogLevel=3
+    LogLevel="INFO"
   }
 }
 
@@ -53,7 +53,7 @@ athena {
     S3OutputLocation="s3://query-results-bucket/folder/"
     AwsCredentialsProviderClass="com.simba.athena.amazonaws.auth.profile.ProfileCredentialsProvider"
     LogPath="logs/application.log"
-    LogLevel=3
+    LogLevel=3 # INFO
   }
 }
 
@@ -67,7 +67,7 @@ athena {
     S3OutputLocation="s3://query-results-bucket/folder/"
     AwsCredentialsProviderClass="DefaultChain"
     LogPath="logs/application.log"
-    LogLevel=3
+    LogLevel="INFO"
   }
 }
 ```
@@ -104,7 +104,7 @@ athena {
     S3OutputLocationPrefix="s3://query-results-bucket/folder"
     AwsCredentialsProviderClass="DefaultChain"
     LogPath="logs/application.log"
-    LogLevel=3
+    LogLevel="INFO"
   }
 }
 ```
